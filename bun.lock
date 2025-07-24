@@ -2,7 +2,7 @@
   "lockfileVersion": 1,
   "workspaces": {
     "": {
-      "name": "tact_cookbook",
+      "name": "jetton_portal",
       "dependencies": {
         "@ton/core": "~0",
       },

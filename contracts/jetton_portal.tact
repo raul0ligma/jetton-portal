@@ -54,7 +54,7 @@ fun calculateJettonWalletAddress(
     });
 }
 
-contract JettonHodler with Deployable {
+contract JettonPortal with Deployable {
     orders: map<Int, OrderStorage>;
     owner: Address;
     usdtAddress: Address;

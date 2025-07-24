@@ -1,11 +1,11 @@
-// scripts/deployJettonHodler.ts
+// scripts/deployJettonPortal.ts
 import { Address, toNano, beginCell } from '@ton/core';
-import { JettonHodler } from '../build/JettonHodler/JettonHodler_JettonHodler';
+import { JettonPortal } from '../build/JettonPortal/JettonPortal_JettonPortal';
 import { NetworkProvider } from '@ton/blueprint';
 import { JettonMaster } from '@ton/ton';
 
 export async function run(provider: NetworkProvider) {
-    console.log('🚀 Deploying JettonHodler to Mainnet...\n');
+    console.log('🚀 Deploying JettonPortal to Mainnet...\n');
 
     const USDT_MASTER = Address.parse('EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs');
 
@@ -28,10 +28,10 @@ export async function run(provider: NetworkProvider) {
     }
 
     // Step 2: Deploy contract using Blueprint's fromInit
-    console.log('🔨 Deploying JettonHodler contract...');
+    console.log('🔨 Deploying JettonPortal contract...');
 
-    const jettonHodler = provider.open(
-        await JettonHodler.fromInit(
+    const jettonPortal = provider.open(
+        await JettonPortal.fromInit(
             provider.sender().address!, // owner
             USDT_MASTER, // usdtAddress
             usdtJettonWalletCode, // usdtJettonWalletCode
@@ -39,10 +39,10 @@ export async function run(provider: NetworkProvider) {
     );
 
     console.log(`   Deployer: ${provider.sender().address}`);
-    console.log(`   Contract will be deployed at: ${jettonHodler.address}`);
+    console.log(`   Contract will be deployed at: ${jettonPortal.address}`);
 
     // Step 3: Send deployment transaction
-    await jettonHodler.send(
+    await jettonPortal.send(
         provider.sender(),
         {
             value: toNano('0.05'),
@@ -50,25 +50,25 @@ export async function run(provider: NetworkProvider) {
         null, // Empty message for deployment
     );
 
-    await provider.waitForDeploy(jettonHodler.address);
+    await provider.waitForDeploy(jettonPortal.address);
 
-    console.log('✅ JettonHodler deployed successfully!\n');
+    console.log('✅ JettonPortal deployed successfully!\n');
 
     // Step 4: Get contract info
     console.log('📋 Contract Information:');
-    console.log(`   📍 Contract Address: ${jettonHodler.address}`);
+    console.log(`   📍 Contract Address: ${jettonPortal.address}`);
 
-    const owner = await jettonHodler.getGetOwner();
+    const owner = await jettonPortal.getGetOwner();
     console.log(`   👤 Owner: ${owner}`);
 
-    const contractUsdtWallet = await jettonHodler.getCalculateSelfUsdtWalletAddress();
+    const contractUsdtWallet = await jettonPortal.getCalculateSelfUsdtWalletAddress();
     console.log(`   💳 Contract USDT Wallet: ${contractUsdtWallet}`);
 
     console.log('🎉 Deployment completed successfully!');
     console.log('\n📝 Next steps:');
-    console.log(`1. Update CONTRACT_ADDRESS in interaction script to: ${jettonHodler.address}`);
+    console.log(`1. Update CONTRACT_ADDRESS in interaction script to: ${jettonPortal.address}`);
     console.log('2. Send USDT to the contract with custom payload to test');
     console.log('3. Use the interaction script to test functionality');
 
-    return jettonHodler.address;
+    return jettonPortal.address;
 }

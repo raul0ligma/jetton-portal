@@ -1,5 +1,5 @@
 {
-    "name": "tact_cookbook",
+    "name": "jetton_portal",
     "version": "0.0.1",
     "scripts": {
         "bp": "blueprint",

@@ -1,11 +1,11 @@
 // scripts/interactJettonHodler.ts
 import { Address, beginCell, toNano } from '@ton/core';
-import { JettonHodler } from '../build/JettonHodler/JettonHodler_JettonHodler';
+import { JettonPortal } from '../build/JettonPortal/JettonPortal_JettonPortal';
 import { NetworkProvider } from '@ton/blueprint';
 import { JettonMaster } from '@ton/ton';
 
 export async function run(provider: NetworkProvider) {
-    console.log('🎮 Interacting with JettonHodler on Mainnet...\n');
+    console.log('🎮 Interacting with JettonPortal on Mainnet...\n');
 
     const CONTRACT_ADDRESS = 'EQCgOqV43Ovm6BQFRCXMAbpkhAJwHJJrhdQhFcDd6rMaSfG-';
 
@@ -13,7 +13,7 @@ export async function run(provider: NetworkProvider) {
     const contractAddress = Address.parse(CONTRACT_ADDRESS);
 
     // Open contract instance using Blueprint's fromAddress
-    const jettonHodler = provider.open(JettonHodler.fromAddress(contractAddress));
+    const jettonPortal = provider.open(JettonPortal.fromAddress(contractAddress));
 
     console.log('📋 Contract Information:');
     console.log(`   📍 Contract: ${contractAddress}`);
@@ -22,10 +22,10 @@ export async function run(provider: NetworkProvider) {
     // Step 1: Get contract data
     console.log('📖 Step 1: Reading contract data...');
 
-    const owner = await jettonHodler.getGetOwner();
+    const owner = await jettonPortal.getGetOwner();
     console.log(`   Owner: ${owner}`);
 
-    const contractUsdtWallet = await jettonHodler.getCalculateSelfUsdtWalletAddress();
+    const contractUsdtWallet = await jettonPortal.getCalculateSelfUsdtWalletAddress();
     console.log(`   Contract USDT Wallet: ${contractUsdtWallet}`);
 
     // provider.sender().address
@@ -37,13 +37,13 @@ export async function run(provider: NetworkProvider) {
     // Step 2: Check current orders
     console.log('📊 Step 2: Checking current orders...');
 
-    const userAddress = await jettonHodler.getOrderAddress(0n);
+    const userAddress = await jettonPortal.getOrderAddress(0n);
 
     if (userAddress) {
         console.log(' 📦 Order found:');
 
-        const orderId = await jettonHodler.getOrderId(0n);
-        const releaseAfter = await jettonHodler.getOrderReleaseAfter(0n);
+        const orderId = await jettonPortal.getOrderId(0n);
+        const releaseAfter = await jettonPortal.getOrderReleaseAfter(0n);
 
         console.log(` User: ${userAddress}`);
         console.log(` Order ID: ${orderId}`);
@@ -104,13 +104,13 @@ export async function run(provider: NetworkProvider) {
     console.log('📊 Step 4: Checking updated orders...');
     console.log('📊 Step 2: Checking current orders...');
 
-    const userAddressAgain = await jettonHodler.getOrderAddress(0n);
+    const userAddressAgain = await jettonPortal.getOrderAddress(0n);
 
     if (userAddressAgain) {
         console.log(' 📦 Order found:');
 
-        const orderId = await jettonHodler.getOrderId(0n);
-        const releaseAfter = await jettonHodler.getOrderReleaseAfter(0n);
+        const orderId = await jettonPortal.getOrderId(0n);
+        const releaseAfter = await jettonPortal.getOrderReleaseAfter(0n);
 
         console.log(` User: ${userAddress}`);
         console.log(` Order ID: ${orderId}`);
@@ -129,7 +129,7 @@ export async function run(provider: NetworkProvider) {
 
         try {
             // Use Blueprint's send method with RefundMessage
-            await jettonHodler.send(
+            await jettonPortal.send(
                 provider.sender(),
                 {
                     value: toNano('0.8'), // Gas for refund
